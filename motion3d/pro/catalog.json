@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "name": "Quaternius",
+      "url": "https://quaternius.com/",
+      "type": "characters",
+      "license": "Verify individual pack; retain attribution if required"
+    },
+    {
+      "name": "Sketchfab",
+      "url": "https://sketchfab.com/",
+      "type": "products",
+      "license": "Verify commercial use and redistribution individually"
+    },
+    {
+      "name": "Freesound",
+      "url": "https://freesound.org/",
+      "type": "audio",
+      "license": "Prefer CC0; verify each sound"
+    },
+    {
+      "name": "Mixamo",
+      "url": "https://www.mixamo.com/",
+      "type": "rigged animation",
+      "license": "Review Adobe terms; do not redistribute raw assets"
+    }
+  ],
+  "assets": []
+}
