@@ -17,10 +17,9 @@ cube('Camera island',(0,.12,1),(1.38,.13,.8),metal,.06,root)
 for x,z in [(-.43,1.2),(.03,1),(-.43,.78)]:
  for rad,y,ma in [(.21,.21,metal),(.17,.25,glass)]:
   bpy.ops.mesh.primitive_cylinder_add(vertices=64,radius=rad,depth=.07,location=(x,y,z),rotation=(math.pi/2,0,0)); o=bpy.context.object; o.data.materials.append(ma); o.parent=root
-for f,a in [(1,0),(120,360)]:
- root.rotation_euler=(.12,0,math.radians(a)); root.keyframe_insert(data_path='rotation_euler',frame=f)
-for fc in root.animation_data.action.fcurves:
- for k in fc.keyframe_points:k.interpolation='LINEAR'
+for f in range(1,121):
+ root.rotation_euler=(.12,0,2*math.pi*(f-1)/120)
+ root.keyframe_insert(data_path='rotation_euler',frame=f)
 def aim(o,p):o.rotation_euler=(Vector(p)-o.location).to_track_quat('-Z','Y').to_euler()
 bpy.ops.object.camera_add(location=(4,-7,2)); cam=bpy.context.object; aim(cam,(0,0,0)); cam.data.type='ORTHO'; cam.data.ortho_scale=5.5
 s=bpy.context.scene;s.camera=cam
@@ -29,5 +28,5 @@ for loc,power,size in [((4,-4,5),900,5),((-4,2,3),1100,4),((0,4,-1),700,3)]:
 s.world.color=(.15,.035,.28)
 s.render.engine='CYCLES';s.cycles.samples=12
 s.render.resolution_x=540;s.render.resolution_y=960;s.render.resolution_percentage=100;s.render.fps=24;s.frame_end=120
-s.render.image_settings.file_format='PNG';s.render.filepath='//frames/'
+s.render.image_settings.file_format='PNG';s.render.filepath=__import__('os').path.abspath('frames')+'/'
 bpy.ops.render.render(animation=True)
