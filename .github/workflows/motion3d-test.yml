@@ -8,8 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y blender ffmpeg
-      - run: blender -b -t 4 --python motion3d/test_phone.py
-      - run: ffmpeg -framerate 24 -i frames/%04d.png -c:v libx264 -pix_fmt yuv420p -movflags +faststart phone.mp4
+      - run: blender -b -t 4 --python-exit-code 1 --python motion3d/test_phone.py
+      - run: test -f frames/0001.png && ffmpeg -framerate 24 -i frames/%04d.png -c:v libx264 -pix_fmt yuv420p -movflags +faststart phone.mp4
       - uses: actions/upload-artifact@v4
         with:
           name: motion3d-phone
