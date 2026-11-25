@@ -1,0 +1,15 @@
+name: Motion Pro Studio Preview
+on:
+  workflow_dispatch:
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y blender
+      - run: blender -b -t 4 --python-exit-code 1 --python motion3d/pro/preview.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: studio-preview
+          path: studio-preview.png
