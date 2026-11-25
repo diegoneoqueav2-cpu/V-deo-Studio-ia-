@@ -1,0 +1,28 @@
+name: Motion Pro Cinematic
+on:
+  workflow_dispatch:
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update && sudo apt-get install -y blender ffmpeg
+      - run: mkdir -p frames motion3d/hybrid/public
+      - run: blender -b -t 4 --python-exit-code 1 --python motion3d/pro/animated.py
+      - run: cp -r frames motion3d/hybrid/public/
+      - run: ffmpeg -y -f lavfi -i "aevalsrc=0.25*sin(2*PI*90*t)*exp(-18*mod(t\,0.5)):s=44100:d=3" motion3d/hybrid/public/sound.wav
+      - run: pip install -r motion3d/pro/requirements-audio.txt && python motion3d/pro/audio_analysis.py motion3d/hybrid/public/sound.wav motion3d/hybrid/timing.json
+      - working-directory: motion3d/hybrid
+        run: npm install && npx remotion render animated.jsx Animated cinematic.mp4 --concurrency=2
+      - run: ffmpeg -y -i motion3d/hybrid/cinematic.mp4 -c:v libx264 -c:a aac -pix_fmt yuv420p -movflags +faststart cinematic.mp4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cinematic
+          path: cinematic.mp4
