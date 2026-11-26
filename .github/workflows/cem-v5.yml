@@ -1,0 +1,20 @@
+name: CEM V5 render
+on:
+  push:
+    paths:
+      - '.github/workflows/cem-v5.yml'
+  workflow_dispatch:
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y blender xvfb
+      - run: xvfb-run -a blender -b -t 4 -P cem-v5/render.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CEM-V5
+          path: |
+            /tmp/CEM_V5.mp4
+            /tmp/CEM_V5.blend
